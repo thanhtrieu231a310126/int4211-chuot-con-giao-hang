@@ -1,5 +1,6 @@
 # Bi mat - KHONG BAO GIO commit
 .env
+.env.*
 *.env
 !.env.example
 
@@ -22,3 +23,11 @@ captures/
 # He dieu hanh
 .DS_Store
 Thumbs.db
+
+# Khoa ky app Android
+*.jks
+*.keystore
+
+# Log
+npm-debug.log*
+*.log
