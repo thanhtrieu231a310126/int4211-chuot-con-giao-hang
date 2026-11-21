@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Màn hình Bàn điều phối: Xem và lọc đơn chưa gán -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F8FAFC">
+
+    <!-- Header tiêu đề -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="#1E40AF">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BÀN ĐIỀU PHỐI GIAO HÀNG"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvSoLuongDon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Đơn chưa gán: 0"
+            android:textColor="#DBEAFE"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- Khu vực lọc đơn theo Phường/Xã -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="1dp"
+        app:strokeColor="#CBD5E1"
+        app:strokeWidth="1dp"
+        app:cardBackgroundColor="#FFFFFF">
+
+        <EditText
+            android:id="@+id/edtLocPhuong"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:paddingHorizontal="12dp"
+            android:hint="🔍 Nhập Phường/Xã để lọc đơn..."
+            android:textSize="14sp"
+            android:inputType="text" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Danh sách đơn hàng bằng RecyclerView-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDonHang"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="12dp" />
+
+    <!-- Dòng thông báo khi danh sách rỗng-->
+    <TextView
+        android:id="@+id/tvDanhSachRong"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Không có đơn hàng nào phù hợp"
+        android:textColor="#94A3B8"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+</LinearLayout>
