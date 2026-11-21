@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="850" height="850" viewBox="0 0 850 850">
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 1L9 5L0 9" fill="none" stroke="#222" stroke-width="1.5"/></marker></defs>
+<rect width="850" height="850" fill="white"/><g fill="none" stroke="#222" stroke-width="1.7">
+<path d="M410 33V70" marker-end="url(#arrow)"/>
+<path d="M410 120V185" marker-end="url(#arrow)"/>
+<path d="M410 235V300" marker-end="url(#arrow)"/>
+<path d="M410 350V415" marker-end="url(#arrow)"/>
+<path d="M320 95H100V250" marker-end="url(#arrow)"/>
+<path d="M320 210H140V250" marker-end="url(#arrow)"/>
+<path d="M368 465V491H218V535" marker-end="url(#arrow)"/>
+<path d="M450 465V505H615V535" marker-end="url(#arrow)"/>
+<path d="M570 585V610H435V660" marker-end="url(#arrow)"/>
+<path d="M655 585V626H700V660" marker-end="url(#arrow)"/>
+<path d="M790 685H830V210H500" marker-end="url(#arrow)"/>
+<path d="M218 585V760H395" marker-end="url(#arrow)"/>
+<path d="M435 710V727H410V745" marker-end="url(#arrow)"/>
+<path d="M50 275H28V795H410V775" marker-end="url(#arrow)"/>
+<rect x="320" y="70" width="180" height="50" rx="10" fill="white"/>
+<text x="410" y="101" fill="#222" stroke="none" font-family="Arial,sans-serif" font-size="19" text-anchor="middle">Chưa gán</text>
+<rect x="320" y="185" width="180" height="50" rx="10" fill="white"/>
+<text x="410" y="216" fill="#222" stroke="none" font-family="Arial,sans-serif" font-size="19" text-anchor="middle">Đã gán</text>
+<rect x="320" y="300" width="180" height="50" rx="10" fill="white"/>
+<text x="410" y="331" fill="#222" stroke="none" font-family="Arial,sans-serif" font-size="19" text-anchor="middle">Đã lấy hàng</text>
+<rect x="320" y="415" width="180" height="50" rx="10" fill="white"/>
+<text x="410" y="446" fill="#222" stroke="none" font-family="Arial,sans-serif" font-size="19" text-anchor="middle">Đang giao</text>
+<rect x="50" y="250" width="180" height="50" rx="10" fill="white"/>
+<text x="140" y="281" fill="#222" stroke="none" font-family="Arial,sans-serif" font-size="19" text-anchor="middle">Đã hủy</text>
+<rect x="128" y="535" width="180" height="50" rx="10" fill="white"/>
+<text x="218" y="566" fill="#222" stroke="none" font-family="Arial,sans-serif" font-size="19" text-anchor="middle">Giao thành công</text>
+<rect x="525" y="535" width="180" height="50" rx="10" fill="white"/>
+<text x="615" y="566" fill="#222" stroke="none" font-family="Arial,sans-serif" font-size="19" text-anchor="middle">Giao thất bại</text>
+<rect x="345" y="660" width="180" height="50" rx="10" fill="white"/>
+<text x="435" y="691" fill="#222" stroke="none" font-family="Arial,sans-serif" font-size="19" text-anchor="middle">Đã hoàn trả</text>
+<rect x="610" y="660" width="180" height="50" rx="10" fill="white"/>
+<text x="700" y="691" fill="#222" stroke="none" font-family="Arial,sans-serif" font-size="19" text-anchor="middle">Chờ giao lại</text>
+<circle cx="410" cy="23" r="10" fill="#222"/><circle cx="410" cy="760" r="15" fill="white"/><circle cx="410" cy="760" r="9" fill="#222"/></g>
+<text x="423" y="157" fill="#222" font-family="Arial,sans-serif" font-size="16">Điều phối gán shipper</text>
+<text x="423" y="272" fill="#222" font-family="Arial,sans-serif" font-size="16">Shipper xác nhận lấy hàng</text>
+<text x="423" y="387" fill="#222" font-family="Arial,sans-serif" font-size="16">Shipper bắt đầu giao</text>
+<text x="114" y="84" fill="#222" font-family="Arial,sans-serif" font-size="16">Điều phối hủy đơn</text>
+<text x="154" y="199" fill="#222" font-family="Arial,sans-serif" font-size="16">Điều phối hủy đơn</text>
+<text x="171" y="482" fill="#222" font-family="Arial,sans-serif" font-size="16">Xác nhận giao [có ảnh]</text>
+<text x="460" y="496" fill="#222" font-family="Arial,sans-serif" font-size="16">Báo thất bại [có lý do và ảnh]</text>
+<text x="405" y="601" fill="#222" font-family="Arial,sans-serif" font-size="16">Điều phối chọn hoàn trả</text>
+<text x="654" y="649" fill="#222" font-family="Arial,sans-serif" font-size="16">Chọn giao lại</text>
+<text x="660" y="200" fill="#222" font-family="Arial,sans-serif" font-size="16">Điều phối gán lại</text>
+<text x="230" y="737" fill="#222" font-family="Arial,sans-serif" font-size="16">/ ghi nhận COD</text>
+<text x="425" y="830" fill="#222" text-anchor="middle" font-family="Arial,sans-serif" font-size="16">Mỗi lần chuyển trạng thái thêm một dòng lịch sử. Giữ nguyên lịch sử cũ.</text></svg>
+
+

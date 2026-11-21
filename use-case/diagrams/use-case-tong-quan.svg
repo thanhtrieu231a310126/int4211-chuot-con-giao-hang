@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="870" height="540" viewBox="0 0 870 540">
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 1L9 5L0 9" fill="none" stroke="#222" stroke-width="1.4"/></marker></defs>
+<rect width="870" height="540" fill="white"/>
+<g stroke="#222" stroke-width="1.45" fill="none">
+<rect x="122" y="2" width="626" height="535"/>
+<polyline points="77,249 174,80 351,80"/>
+<polyline points="77,249 174,156 190,156"/>
+<polyline points="77,249 174,233 190,233"/>
+<polyline points="77,249 174,310 190,310"/>
+<polyline points="77,249 174,387 190,387"/>
+<polyline points="77,249 174,464 190,464"/>
+<polyline points="790,232 738,80 519,80"/>
+<polyline points="790,232 738,169 730,169"/>
+<polyline points="790,232 738,284 730,284"/>
+<polyline points="790,232 738,403 730,403"/>
+<polyline points="790,446 738,403 730,403"/>
+<ellipse cx="435" cy="80" rx="84" ry="27" fill="white"/>
+<ellipse cx="308" cy="156" rx="118" ry="27" fill="white"/>
+<ellipse cx="308" cy="233" rx="118" ry="27" fill="white"/>
+<ellipse cx="308" cy="310" rx="118" ry="27" fill="white"/>
+<ellipse cx="308" cy="387" rx="118" ry="27" fill="white"/>
+<ellipse cx="308" cy="464" rx="118" ry="27" fill="white"/>
+<ellipse cx="600" cy="169" rx="130" ry="27" fill="white"/>
+<ellipse cx="600" cy="284" rx="130" ry="27" fill="white"/>
+<ellipse cx="600" cy="403" rx="130" ry="27" fill="white"/>
+<circle cx="56" cy="229" r="8" fill="white"/>
+<path d="M56 237v30m-14 -17h28m-14 17l-12 15m12 -15l12 15"/>
+<circle cx="811" cy="212" r="8" fill="white"/>
+<path d="M811 220v30m-14 -17h28m-14 17l-12 15m12 -15l12 15"/>
+<circle cx="811" cy="426" r="8" fill="white"/>
+<path d="M811 434v30m-14 -17h28m-14 17l-12 15m12 -15l12 15"/>
+</g><g font-family="Arial, sans-serif" fill="#222" text-anchor="middle">
+<text x="435" y="29" font-size="19" font-weight="bold">Hệ thống điều phối giao hàng</text>
+<text x="435" y="77.5" font-size="16" font-weight="normal">Đăng nhập</text>
+<text x="435" y="94.5" font-size="14" font-weight="normal">UC-01</text>
+<text x="308" y="153.5" font-size="16" font-weight="normal">Quản lý đơn hàng</text>
+<text x="308" y="170.5" font-size="14" font-weight="normal">UC-02, UC-03</text>
+<text x="308" y="230.5" font-size="16" font-weight="normal">Quản lý shipper</text>
+<text x="308" y="247.5" font-size="14" font-weight="normal">UC-04, UC-05</text>
+<text x="308" y="307.5" font-size="16" font-weight="normal">Phân công giao hàng</text>
+<text x="308" y="324.5" font-size="14" font-weight="normal">UC-06</text>
+<text x="308" y="384.5" font-size="16" font-weight="normal">Theo dõi và xử lý đơn</text>
+<text x="308" y="401.5" font-size="14" font-weight="normal">UC-07, UC-13</text>
+<text x="308" y="461.5" font-size="16" font-weight="normal">Đối soát và báo cáo</text>
+<text x="308" y="478.5" font-size="14" font-weight="normal">UC-15, UC-16</text>
+<text x="600" y="166.5" font-size="16" font-weight="normal">Thực hiện giao hàng</text>
+<text x="600" y="183.5" font-size="14" font-weight="normal">UC-10, UC-11, UC-12, UC-17</text>
+<text x="600" y="281.5" font-size="16" font-weight="normal">Theo dõi COD đang giữ</text>
+<text x="600" y="298.5" font-size="14" font-weight="normal">UC-14</text>
+<text x="600" y="400.5" font-size="16" font-weight="normal">Tra cứu đơn và chỉ đường</text>
+<text x="600" y="417.5" font-size="14" font-weight="normal">UC-08, UC-09</text>
+<text x="56" y="301" font-size="16" font-weight="normal">Người</text>
+<text x="56" y="318" font-size="16" font-weight="normal">điều phối</text>
+<text x="811" y="284" font-size="16" font-weight="normal">Shipper</text>
+<text x="811" y="498" font-size="16" font-weight="normal">Google Maps</text>
+</g></svg>

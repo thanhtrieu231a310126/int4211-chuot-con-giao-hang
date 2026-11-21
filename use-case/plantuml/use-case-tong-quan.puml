@@ -1,0 +1,63 @@
+@startuml
+' Bố cục của SVG được chỉnh tay trong thư mục diagrams.
+left to right direction
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam monochrome true
+skinparam nodesep 18
+skinparam ranksep 42
+skinparam linetype polyline
+skinparam defaultFontName "DejaVu Sans"
+skinparam defaultFontSize 16
+skinparam ArrowColor #222222
+skinparam ArrowThickness 1.4
+skinparam actor {
+  BackgroundColor #FFFFFF
+  BorderColor #222222
+  FontColor #000000
+}
+skinparam usecase {
+  BackgroundColor #FFFFFF
+  BorderColor #222222
+  FontColor #000000
+}
+skinparam rectangle {
+  BackgroundColor #FFFFFF
+  BorderColor #222222
+  FontColor #000000
+}
+
+actor "Người điều phối" as Dispatcher
+actor "Shipper" as Shipper
+actor "Google Maps" as Maps
+
+rectangle "HỆ THỐNG ĐIỀU PHỐI GIAO HÀNG" {
+  usecase "Đăng nhập\n(UC-01)" as Login
+
+  usecase "Quản lý đơn hàng\n(UC-02, UC-03)" as ManageOrders
+  usecase "Quản lý shipper\n(UC-04, UC-05)" as ManageShippers
+  usecase "Phân công giao hàng\n(UC-06)" as AssignOrders
+  usecase "Theo dõi và xử lý đơn\n(UC-07, UC-13)" as MonitorOrders
+  usecase "Đối soát và báo cáo\n(UC-15, UC-16)" as ReconcileReport
+
+  usecase "Tra cứu đơn và chỉ đường\n(UC-08, UC-09)" as ViewRoute
+  usecase "Thực hiện giao hàng\n(UC-10, UC-11, UC-12, UC-17)" as Deliver
+  usecase "Theo dõi COD đang giữ\n(UC-14)" as ViewCOD
+
+}
+
+Dispatcher -right- Login
+Dispatcher -right- ManageOrders
+Dispatcher -right- ManageShippers
+Dispatcher -right- AssignOrders
+Dispatcher -right- MonitorOrders
+Dispatcher -right- ReconcileReport
+
+Shipper -left- Login
+Shipper -left- ViewRoute
+Shipper -left- Deliver
+Shipper -left- ViewCOD
+Maps -left- ViewRoute
+
+@enduml

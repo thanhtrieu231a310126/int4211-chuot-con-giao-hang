@@ -1,0 +1,48 @@
+@startuml
+' Bố cục của SVG được chỉnh tay trong thư mục diagrams.
+title Sơ đồ trạng thái đơn hàng
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam monochrome true
+skinparam linetype ortho
+skinparam defaultFontName "DejaVu Sans"
+skinparam defaultFontSize 15
+skinparam ArrowColor #666666
+skinparam state {
+  BackgroundColor #DAE8FC
+  BorderColor #6C8EBF
+  FontColor #000000
+}
+
+[*] --> ChuaGan
+state "Chưa gán" as ChuaGan
+state "Đã gán" as DaGan
+state "Đã lấy hàng" as DaLayHang
+state "Đang giao" as DangGiao
+state "Giao thành công" as ThanhCong #D5E8D4
+state "Giao thất bại" as ThatBai #F8CECC
+state "Chờ giao lại" as ChoGiaoLai #FFE6CC
+state "Đã hoàn trả" as HoanTra #F5F5F5
+state "Đã hủy" as DaHuy #F5F5F5
+
+ChuaGan --> DaGan : Điều phối gán shipper
+DaGan --> DaLayHang : Shipper xác nhận lấy hàng
+ChuaGan --> DaHuy : Điều phối hủy đơn
+DaGan --> DaHuy : Điều phối hủy đơn
+DaLayHang --> DangGiao : Shipper bắt đầu giao
+DangGiao --> ThanhCong : Xác nhận giao [có ảnh]
+DangGiao --> ThatBai : Báo thất bại [có lý do và ảnh]
+ThatBai --> ChoGiaoLai : Điều phối chọn giao lại
+ThatBai --> HoanTra : Điều phối chọn hoàn trả
+ChoGiaoLai --> DaGan : Điều phối gán lại
+ThanhCong --> [*] : / ghi nhận COD
+HoanTra --> [*]
+DaHuy --> [*]
+
+note bottom of DangGiao
+  Mỗi lần chuyển trạng thái phải thêm một dòng lịch sử.
+  Không sửa hoặc xóa lịch sử cũ.
+end note
+
+@enduml

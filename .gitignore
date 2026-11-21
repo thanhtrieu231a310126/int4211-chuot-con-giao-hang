@@ -1,0 +1,24 @@
+# Bi mat - KHONG BAO GIO commit
+.env
+*.env
+!.env.example
+
+# Node.js (backend)
+node_modules/
+
+# Android (admin-android)
+.gradle/
+local.properties
+build/
+.idea/
+*.iml
+captures/
+
+# Flutter (client-flutter)
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# He dieu hanh
+.DS_Store
+Thumbs.db
