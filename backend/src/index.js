@@ -17,6 +17,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Trang gốc: mở link backend thấy thông báo thay vì lỗi 404
+app.get('/', (req, res) => res.json({ ten: 'Chuot Con API', trangThai: 'ok' }));
+
 // Kiểm tra sức khỏe: Render và thầy mở đường dẫn này để biết server còn sống
 app.get('/health', async (req, res) => {
   let csdl = 'ok';

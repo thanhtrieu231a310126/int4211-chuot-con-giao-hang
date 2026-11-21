@@ -2,7 +2,7 @@
 
 Backend hệ thống điều phối giao hàng chặng cuối nội thành.
 
-- **Địa chỉ gốc (BASE_URL):** `https://<chưa deploy>.onrender.com` — chạy ở máy thì là `http://localhost:3000`
+- **Địa chỉ gốc (BASE_URL):** `https://chuot-con-backend.onrender.com` — chạy ở máy thì là `http://localhost:3000`
   - Máy ảo Android gọi máy tính thì dùng `http://10.0.2.2:3000`
 - Dữ liệu gửi và nhận đều là JSON (`Content-Type: application/json`).
 - Render gói Free sẽ "ngủ" sau 15 phút không ai gọi. Lần gọi đầu tiên có thể mất 30–50 giây, app nên đặt timeout ít nhất 60 giây.
