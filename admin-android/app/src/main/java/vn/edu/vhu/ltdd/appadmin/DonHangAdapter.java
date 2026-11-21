@@ -53,11 +53,11 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
     public void onBindViewHolder(@NonNull DonHangViewHolder holder, int position) {
         DonHang don = danhSach.get(position);
 
-        holder.tvMaDon.setText("Mã: #" + don.getMaDon());
-        holder.tvTienCod.setText("COD: " + DonHang.dinhDangTien(don.getTienCod()));
-        holder.tvNguoiNhan.setText("Người nhận: " + don.getNguoiNhan() + " (" + don.getSoDienThoai() + ")");
-        holder.tvDiaChi.setText("Địa chỉ: " + don.getDiaChi() + ", " + don.getPhuongXa());
-        holder.tvTrongLuong.setText("Khối lượng: " + don.getTrongLuong() + " kg");
+        holder.tvMaDon.setText(don.getMaDon());
+        holder.tvNguoiNhan.setText(don.getNguoiNhan());
+        holder.tvDiaChi.setText(don.getDiaChi() + ", " + don.getPhuongXa());
+        holder.tvTienCod.setText("COD: " + DonHang.dinhDangTien(don.getTienCod()) + " đ");
+        holder.tvTrongLuong.setText(don.getTrongLuong() + " kg");
 
         // Dùng getBindingAdapterPosition() để bắt đúng vị trí khi bấm
         holder.itemView.setOnClickListener(v -> {

@@ -1,29 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Màn hình Đăng nhập Điều phối viên -->
+<!-- Màn hình Đăng nhập -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8FAFC"
+    android:background="#FAF7F2"
     android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp"
+        android:padding="28dp"
         android:gravity="center_horizontal">
 
+        <!-- Khoảng cách phía trên -->
         <View
             android:layout_width="match_parent"
-            android:layout_height="40dp" />
+            android:layout_height="60dp" />
 
-        <!-- Tiêu đề App -->
+        <!-- Icon xe máy giao hàng màu cam (thương hiệu Chuột Con) -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ĐIỀU PHỐI GIAO HÀNG"
-            android:textColor="#1E40AF"
+            android:text="🛵"
+            android:textSize="56sp" />
+
+        <!-- Tiêu đề App dành cho Điều Phối -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Chuột Con - Điều Phối"
+            android:textColor="#18181B"
             android:textSize="22sp"
             android:textStyle="bold" />
 
@@ -31,103 +40,78 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Đăng nhập tài khoản Điều Phối Viên"
-            android:textColor="#64748B"
-            android:textSize="14sp" />
+            android:text="Hệ thống quản lý &amp; phân công giao hàng"
+            android:textColor="#71717A"
+            android:textSize="13sp" />
 
-        <!-- Khung chứa Form nhập liệu -->
-        <com.google.android.material.card.MaterialCardView
+        <!-- Khoảng cách giữa logo và form -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="32dp" />
+
+        <!-- Ô nhập Email (có icon phong bì thư) -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilUsername"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            app:cardCornerRadius="14dp"
-            app:cardElevation="2dp"
-            app:strokeColor="#E2E8F0"
-            app:strokeWidth="1dp"
-            app:cardBackgroundColor="#FFFFFF">
+            android:hint="Email"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxStrokeColor="#E4E4E7"
+            app:boxBackgroundColor="#FFFFFF"
+            app:startIconDrawable="@android:drawable/ic_dialog_email"
+            app:errorEnabled="true">
 
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:imeOptions="actionNext"
+                android:id="@+id/etUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="20dp">
+                android:inputType="textEmailAddress"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Ô nhập Tên đăng nhập -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilUsername"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Tên đăng nhập"
-                    app:errorEnabled="true">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etUsername"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:maxLines="1" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Ô nhập Mật khẩu (có nút con mắt ẩn/hiện) -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilPassword"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:hint="Mật khẩu"
-                    app:passwordToggleEnabled="true"
-                    app:errorEnabled="true">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etPassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPassword"
-                        android:maxLines="1" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Nút Đăng nhập -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnLogin"
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:layout_marginTop="16dp"
-                    android:text="ĐĂNG NHẬP"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:backgroundTint="#1E40AF"
-                    app:cornerRadius="10dp" />
-
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Khung gợi ý tài khoản demo để thầy/nhóm kiểm tra -->
-        <LinearLayout
+        <!-- Ô nhập Mật khẩu (có icon ổ khóa & con mắt ẩn/hiện) -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilPassword"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="24dp"
-            android:padding="12dp"
-            android:background="#EFF6FF">
+            android:layout_marginTop="8dp"
+            android:hint="Mật khẩu"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxStrokeColor="#E4E4E7"
+            app:boxBackgroundColor="#FFFFFF"
+            app:startIconDrawable="@android:drawable/ic_lock_idle_lock"
+            app:passwordToggleEnabled="true"
+            app:errorEnabled="true">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputEditText
+                android:imeOptions="actionDone"
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Tài khoản thử nghiệm demo:"
-                android:textStyle="bold"
-                android:textColor="#1E40AF"
-                android:textSize="13sp" />
+                android:inputType="textPassword"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="• Điều phối viên: admin / 123456\n• Tài khoản Shipper (bị từ chối): shipper1 / 123456"
-                android:textColor="#64748B"
-                android:textSize="12sp" />
-        </LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="20dp"
+            android:text="ĐĂNG NHẬP"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#F97316"
+            app:cornerRadius="26dp" />
 
     </LinearLayout>
 </ScrollView>

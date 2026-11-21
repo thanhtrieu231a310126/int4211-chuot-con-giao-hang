@@ -15,12 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * MainActivity: Màn hình Bàn điều phối - Quản lý đơn chưa gán.
- */
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+
 public class MainActivity extends AppCompatActivity {
 
-    // Danh sách gốc chứa tất cả đơn và danh sách hiển thị sau khi lọc
     private final List<DonHang> danhSachGoc = new ArrayList<>();
     private final List<DonHang> danhSachHienThi = new ArrayList<>();
 
@@ -28,36 +29,37 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rvDonHang;
     private TextView tvSoLuongDon, tvDanhSachRong;
     private EditText edtLocPhuong;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // 1. Ánh xạ các thành phần giao diện
         rvDonHang = findViewById(R.id.rvDonHang);
         tvSoLuongDon = findViewById(R.id.tvSoLuongDon);
         tvDanhSachRong = findViewById(R.id.tvDanhSachRong);
         edtLocPhuong = findViewById(R.id.edtLocPhuong);
 
-        // 2. Tạo dữ liệu mẫu
-        taoDuLieuMau();
+        // Lấy token thật truyền từ màn hình Đăng nhập sang
+        token = getIntent().getStringExtra("TOKEN");
 
-        // 3. Cài đặt LayoutManager cho RecyclerView
-        // LinearLayoutManager: Sắp xếp các ô đơn hàng theo chiều dọc
         rvDonHang.setLayoutManager(new LinearLayoutManager(this));
 
-        // 4. Khởi tạo Adapter và bắt sự kiện bấm vào một đơn
         adapter = new DonHangAdapter(danhSachHienThi, donHang -> {
-            // Khi bấm vào đơn, báo thông tin
             Toast.makeText(this, "Đã chọn đơn: #" + donHang.getMaDon() + " (" + donHang.getPhuongXa() + ")", Toast.LENGTH_SHORT).show();
         });
         rvDonHang.setAdapter(adapter);
 
-        // 5. Cập nhật số lượng đơn lên tiêu đề
-        capNhatSoLuong();
+        // 1. Kiểm tra: Nếu có token thật thì gọi API thật, nếu không có thì dùng dữ liệu mẫu
+        if (token != null && !token.isEmpty()) {
+            goiApiLayDanhSachDonThat();
+        } else {
+            taoDuLieuMau();
+            capNhatSoLuong();
+        }
 
-        // 6. Xử lý chức năng lọc đơn theo Phường/Xã khi người dùng gõ chữ (UC-03)
+        // 2. Chức năng lọc đơn theo Phường/Xã
         edtLocPhuong.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -72,21 +74,60 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * DỮ LIỆU MẪU (MOCK DATA):
-     * Các đơn hàng nội thành TP.HCM (Quận 1, 3, 5...) ở trạng thái Chưa gán.
-     * Khi trưởng nhóm cấp API thật, thay hàm này bằng hàm gọi mạng Retrofit.
-     */
-    private void taoDuLieuMau() {
-        danhSachGoc.add(new DonHang("DH001", "Võ Vũ Sông Dài", "0901112233", "27 Trần Quốc Thảo", "Phường Xuân Hoà", 1.2, 85000));
-        danhSachGoc.add(new DonHang("DH002", "Trần Thị Bình", "0912223344", "45 Hai Bà Trưng", "Phường Đa Kao", 0.5, 0));
-        danhSachGoc.add(new DonHang("DH003", "Lê Hoàng Cúc", "0933334455", "78 Nguyễn Đình Chiểu", "Phường Đa Kao", 2.8, 150000));
-        danhSachGoc.add(new DonHang("DH004", "Nguyễn Quốc Dũng", "0944445566", "210 Điện Biên Phủ", "Phường Võ Thị Sáu", 3.5, 220000));
-        danhSachGoc.add(new DonHang("DH005", "Võ Minh Thi", "0955556677", "99 Trần Hưng Đạo", "Phường Cầu Ông Lãnh", 0.8, 60000));
+    private void goiApiLayDanhSachDonThat() {
+        tvSoLuongDon.setText("Đang tải dữ liệu từ máy chủ Render...");
 
-        // Ban đầu copy toàn bộ danh sách gốc sang danh sách hiển thị
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        apiService.layDanhSachDon("Bearer " + token, "CHUA_GAN").enqueue(new Callback<List<ApiService.DonHangApi>>() {
+            @Override
+            public void onResponse(Call<List<ApiService.DonHangApi>> call, Response<List<ApiService.DonHangApi>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    danhSachGoc.clear();
+
+                    // Đọc từng đơn hàng từ database Supabase trên Render gửi về
+                    for (ApiService.DonHangApi apiItem : response.body()) {
+                        double kg = 0.0;
+                        int cod = 0;
+                        try {
+                            if (apiItem.trong_luong != null) kg = Double.parseDouble(apiItem.trong_luong);
+                            if (apiItem.tien_cod != null) cod = (int) Double.parseDouble(apiItem.tien_cod);
+                        } catch (Exception ignored) {}
+
+                        danhSachGoc.add(new DonHang(
+                                apiItem.ma_van_don,
+                                apiItem.nguoi_nhan,
+                                apiItem.sdt_nhan,
+                                apiItem.dia_chi,
+                                apiItem.phuong_xa,
+                                kg,
+                                cod
+                        ));
+                    }
+
+                    danhSachHienThi.clear();
+                    danhSachHienThi.addAll(danhSachGoc);
+                    adapter.notifyDataSetChanged();
+                    capNhatSoLuong();
+
+                    Toast.makeText(MainActivity.this, "Đã tải thành công " + danhSachGoc.size() + " đơn từ server!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Lỗi lấy dữ liệu (Mã: " + response.code() + ")", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ApiService.DonHangApi>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Lỗi kết nối máy chủ: " + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void taoDuLieuMau() {
+        danhSachGoc.add(new DonHang("DH001", "Nguyễn Văn An", "0901112233", "123 Lê Lợi", "Phường Bến Nghé", 1.2, 85000));
+        danhSachGoc.add(new DonHang("DH002", "Trần Thị Bình", "0912223344", "45 Hai Bà Trưng", "Phường Đa Kao", 0.5, 0));
         danhSachHienThi.addAll(danhSachGoc);
     }
+
     private void locDonTheoPhuong(String tuKhoa) {
         danhSachHienThi.clear();
 
@@ -100,11 +141,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // Báo cho Adapter biết dữ liệu đã đổi để vẽ lại danh sách
         adapter.notifyDataSetChanged();
         capNhatSoLuong();
 
-        // Xử lý luồng ngoại lệ: Nếu không tìm thấy đơn nào thì hiện chữ thông báo rỗng
         if (danhSachHienThi.isEmpty()) {
             tvDanhSachRong.setVisibility(View.VISIBLE);
             rvDonHang.setVisibility(View.GONE);
