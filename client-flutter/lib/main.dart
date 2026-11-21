@@ -14,7 +14,7 @@ class AppClient extends StatelessWidget {
       title: 'Chuột Con Shipper',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(colorSchemeSeed: Colors.orange, useMaterial3: true),
-      home: const DangNhapScreen(), // màn hình đầu tiên khi mở app
+      home: const DangNhapScreen(),
     );
   }
 }

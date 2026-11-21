@@ -10,12 +10,12 @@ class DsDonScreen extends StatefulWidget {
 }
 
 class _DsDonScreenState extends State<DsDonScreen> {
-  late Future<List<DonHang>> _tuongLaiDs; // kết quả gọi API (sẽ có trong tương lai)
+  late Future<List<DonHang>> _tuongLaiDs;
 
   @override
   void initState() {
     super.initState();
-    _tuongLaiDs = ApiService.layDonCuaToi(); // gọi GET /shipper/toi/don khi mở màn
+    _tuongLaiDs = ApiService.layDonCuaToi();
   }
 
   Future<void> _taiLai() async {
@@ -23,14 +23,17 @@ class _DsDonScreenState extends State<DsDonScreen> {
     await _tuongLaiDs;
   }
 
-  // Đổi mã trạng thái thành chữ tiếng Việt và màu tương ứng
   (String, Color) _hienThiTrangThai(String trangThai) {
     switch (trangThai) {
+      case 'CHUA_GAN':    return ('Chưa gán', Colors.grey);
       case 'DA_GAN':      return ('Đã gán', Colors.blue);
       case 'DA_LAY_HANG': return ('Đã lấy hàng', Colors.indigo);
       case 'DANG_GIAO':   return ('Đang giao', Colors.orange);
       case 'THANH_CONG':  return ('Thành công', Colors.green);
       case 'THAT_BAI':    return ('Thất bại', Colors.red);
+      case 'CHO_GIAO_LAI': return ('Chờ giao lại', Colors.purple);
+      case 'DA_HOAN_TRA': return ('Đã hoàn trả', Colors.brown);
+      case 'DA_HUY':      return ('Đã hủy', Colors.black54);
       default:            return (trangThai, Colors.grey);
     }
   }
@@ -42,24 +45,21 @@ class _DsDonScreenState extends State<DsDonScreen> {
       body: FutureBuilder<List<DonHang>>(
         future: _tuongLaiDs,
         builder: (context, snapshot) {
-          // 1. Đang chờ backend: hiện vòng xoay
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
-          // 2. Có lỗi: hiện thông báo + nút thử lại
           if (snapshot.hasError) {
             return Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('Không tải được đơn: ${snapshot.error}', textAlign: TextAlign.center),
+                  Text(snapshot.error.toString().replaceFirst('Exception: ', ''), textAlign: TextAlign.center),
                   const SizedBox(height: 12),
                   ElevatedButton(onPressed: _taiLai, child: const Text('Thử lại')),
                 ],
               ),
             );
           }
-          // 3. Có dữ liệu: hiện danh sách (kéo xuống để tải lại)
           final danhSach = snapshot.data ?? [];
           return RefreshIndicator(
             onRefresh: _taiLai,
