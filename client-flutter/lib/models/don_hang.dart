@@ -1,36 +1,40 @@
-// Mô tả một đơn hàng: mỗi đơn có những thông tin gì
 class DonHang {
+  final int id;
   final String maDon;
   final String tenNguoiNhan;
+  final String sdtNhan;
   final String diaChi;
-  final String trangThai; // DA_GAN, DA_LAY_HANG, DANG_GIAO, THANH_CONG, THAT_BAI
-  final int tienCod;      // tiền thu hộ, đơn vị đồng
-  final double trongLuong; // kg
+  final String trangThai;
+  final int tienCod;
+  final double trongLuong;
 
   const DonHang({
+    this.id = 0,
     required this.maDon,
     required this.tenNguoiNhan,
+    this.sdtNhan = '',
     required this.diaChi,
     required this.trangThai,
     required this.tienCod,
     this.trongLuong = 0,
   });
 
-  // Đổi 1 đơn dạng JSON (backend gửi về) thành object DonHang
-  // TODO: khi Bình gửi mẫu JSON thật thì sửa tên các trường cho khớp
   factory DonHang.fromJson(Map<String, dynamic> j) {
+    final diaChi = (j['dia_chi'] ?? '').toString();
+    final phuongXa = (j['phuong_xa'] ?? '').toString();
     return DonHang(
-      maDon: (j['ma_don'] ?? j['id'] ?? '').toString(),
-      tenNguoiNhan: (j['ten_nguoi_nhan'] ?? '').toString(),
-      diaChi: (j['dia_chi_giao'] ?? j['dia_chi'] ?? '').toString(),
+      id: docSo(j['id']).toInt(),
+      maDon: (j['ma_van_don'] ?? '').toString(),
+      tenNguoiNhan: (j['nguoi_nhan'] ?? '').toString(),
+      sdtNhan: (j['sdt_nhan'] ?? '').toString(),
+      diaChi: phuongXa.isEmpty ? diaChi : '$diaChi, $phuongXa',
       trangThai: (j['trang_thai'] ?? '').toString(),
       tienCod: docSo(j['tien_cod']).round(),
       trongLuong: docSo(j['trong_luong']),
     );
   }
 
-  // Backend có thể trả số dạng 150000 hoặc chuỗi "150000" / "150000.00"
-  // Hàm này đổi tất cả về số, lỗi thì trả 0 chứ không làm app văng
+  // backend co the tra so dang chuoi "150000"
   static double docSo(dynamic giaTri) {
     try {
       if (giaTri == null) return 0;
@@ -42,7 +46,7 @@ class DonHang {
   }
 }
 
-// Dữ liệu giả để làm giao diện trước, sau này thay bằng dữ liệu từ API
+// du lieu test khi chua co backend
 const List<DonHang> danhSachDonGia = [
   DonHang(maDon: 'DH001', tenNguoiNhan: 'Nguyễn Văn An',
       diaChi: '12 Lê Lợi, P. Bến Thành', trangThai: 'DA_GAN', tienCod: 150000, trongLuong: 1.2),

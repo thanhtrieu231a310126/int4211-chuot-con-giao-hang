@@ -10,27 +10,25 @@ class DangNhapScreen extends StatefulWidget {
 }
 
 class _DangNhapScreenState extends State<DangNhapScreen> {
-  final _formKey = GlobalKey<FormState>();       // dùng để kiểm tra form
-  final _sdtController = TextEditingController(); // giữ chữ trong ô số điện thoại
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
   final _matKhauController = TextEditingController();
   bool _anMatKhau = true;
-  bool _dangTai = false; // true khi đang chờ backend trả lời
+  bool _dangTai = false;
 
   @override
   void dispose() {
-    _sdtController.dispose();
+    _emailController.dispose();
     _matKhauController.dispose();
     super.dispose();
   }
 
   Future<void> _dangNhap() async {
-    // Nếu ô nào còn trống thì dừng, các dòng báo lỗi đỏ sẽ hiện ra
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _dangTai = true);
     try {
-      // Gọi API POST /auth/dang-nhap (hoặc dữ liệu giả nếu chưa có domain)
-      await ApiService.dangNhap(_sdtController.text.trim(), _matKhauController.text);
+      await ApiService.dangNhap(_emailController.text.trim(), _matKhauController.text);
       if (!mounted) return;
       Navigator.pushReplacement(
         context,
@@ -39,7 +37,7 @@ class _DangNhapScreenState extends State<DangNhapScreen> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Đăng nhập thất bại: $e')),
+        SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))),
       );
     } finally {
       if (mounted) setState(() => _dangTai = false);
@@ -63,15 +61,15 @@ class _DangNhapScreenState extends State<DangNhapScreen> {
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 32),
                 TextFormField(
-                  controller: _sdtController,
-                  keyboardType: TextInputType.phone,
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
-                    labelText: 'Số điện thoại',
-                    prefixIcon: Icon(Icons.phone),
+                    labelText: 'Email',
+                    prefixIcon: Icon(Icons.email),
                     border: OutlineInputBorder(),
                   ),
                   validator: (v) =>
-                  (v == null || v.isEmpty) ? 'Vui lòng nhập số điện thoại' : null,
+                  (v == null || v.isEmpty) ? 'Vui lòng nhập email' : null,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
@@ -94,7 +92,7 @@ class _DangNhapScreenState extends State<DangNhapScreen> {
                   width: double.infinity,
                   height: 48,
                   child: ElevatedButton(
-                    onPressed: _dangTai ? null : _dangNhap, // khóa nút khi đang tải
+                    onPressed: _dangTai ? null : _dangNhap,
                     child: _dangTai
                         ? const CircularProgressIndicator()
                         : const Text('ĐĂNG NHẬP'),

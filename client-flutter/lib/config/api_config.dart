@@ -1,12 +1,9 @@
-// CẤU HÌNH API: chỉ cần sửa ở file này
 class ApiConfig {
-  // Điền domain Render khi Bình gửi, ví dụ: 'https://chuot-con-api.onrender.com'
-  // (không có dấu / ở cuối). Để trống '' thì app dùng dữ liệu giả.
-  static const String baseUrl = '';
+  static const String baseUrl = 'https://chuot-con-backend.onrender.com';
 
-  // Đường dẫn các API (Bình đã chốt)
-  static const String dangNhap = '/auth/dang-nhap';     // POST
-  static const String donCuaToi = '/shipper/toi/don';   // GET
+  static const String dangNhap = '/auth/dang-nhap';
+  static const String donCuaToi = '/shipper/toi/don';
 
+  // de trong baseUrl thi dung du lieu test
   static bool get dungDuLieuGia => baseUrl.isEmpty;
 }
