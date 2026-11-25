@@ -1,5 +1,8 @@
 package vn.edu.vhu.ltdd.appadmin;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -46,8 +49,15 @@ public class MainActivity extends AppCompatActivity {
         edtLocPhuong = findViewById(R.id.edtLocPhuong);
         progressBar = findViewById(R.id.progressBar);
 
-        // Lấy token thật truyền từ màn hình Đăng nhập sang
-        token = getIntent().getStringExtra("TOKEN");
+        // Lấy token từ SharedPreferences (nếu không có thì lấy từ Intent)
+        SharedPreferences pref = getSharedPreferences("ChuotConPref", MODE_PRIVATE);
+        token = pref.getString("TOKEN", null);
+        if (token == null || token.isEmpty()) {
+            token = getIntent().getStringExtra("TOKEN");
+        }
+
+        // Bắt sự kiện bấm nút Đăng xuất -> Mở hộp thoại xác nhận
+        findViewById(R.id.btnDangXuat).setOnClickListener(v -> hienThiHopThoaiDangXuat());
 
         rvDonHang.setLayoutManager(new LinearLayoutManager(this));
 
@@ -122,6 +132,13 @@ public class MainActivity extends AppCompatActivity {
                     capNhatSoLuong();
                     Log.d(TAG, "Tải thành công " + danhSachGoc.size() + " đơn từ Render");
                 } else {
+                    // Token hết hạn (401) -> Tự động đăng xuất
+                    if (response.code() == 401) {
+                        Log.e(TAG, "Token hết hạn hoặc không hợp lệ (401)");
+                        Toast.makeText(MainActivity.this, "Phiên đăng nhập đã hết hạn!", Toast.LENGTH_SHORT).show();
+                        thucHienDangXuat();
+                        return;
+                    }
                     Log.e(TAG, "Lỗi từ máy chủ, mã: " + response.code());
                     Toast.makeText(MainActivity.this, "Lỗi lấy dữ liệu (Mã: " + response.code() + ")", Toast.LENGTH_SHORT).show();
                 }
@@ -170,5 +187,23 @@ public class MainActivity extends AppCompatActivity {
 
     private void capNhatSoLuong() {
         tvSoLuongDon.setText("Đơn chưa gán: " + danhSachHienThi.size());
+    }
+    // Hộp thoại xác nhận trước khi đăng xuất
+    private void hienThiHopThoaiDangXuat() {
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Đăng xuất")
+                .setMessage("Bạn có chắc chắn muốn đăng xuất?")
+                .setPositiveButton("Đăng xuất", (dialog, which) -> thucHienDangXuat())
+                .setNegativeButton("Hủy", null)
+                .show();
+    }
+
+    // Xóa SharedPreferences và dọn sạch Stack chuyển về Login
+    private void thucHienDangXuat() {
+        getSharedPreferences("ChuotConPref", MODE_PRIVATE).edit().clear().apply();
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

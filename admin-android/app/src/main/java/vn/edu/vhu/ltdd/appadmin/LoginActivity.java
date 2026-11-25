@@ -27,6 +27,13 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        // Auto vào thẳng Bàn điều phối nếu đã có Token lưu sẵn
+        String savedToken = getSharedPreferences("ChuotConPref", MODE_PRIVATE).getString("TOKEN", null);
+        if (savedToken != null && !savedToken.isEmpty()) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+            return;
+        }
 
         tilUsername = findViewById(R.id.tilUsername);
         tilPassword = findViewById(R.id.tilPassword);
@@ -83,13 +90,19 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     ApiService.DangNhapResponse data = response.body();
 
-                    // Kiểm tra phân quyền: Phải đúng là DIEU_PHOI mới cho vào app Admin
+                    // Kiểm tra phân quyền: đúng DIEU_PHOI mới cho vào app Admin
                     if ("DIEU_PHOI".equals(data.nguoiDung.vaiTro)) {
                         Toast.makeText(LoginActivity.this, "Đăng nhập thành công: " + data.nguoiDung.hoTen, Toast.LENGTH_SHORT).show();
 
-                        // Chuyển sang Bàn điều phối (MainActivity) và gửi kèm Token thật sang
+                        // Lưu Token và Tên người dùng vào bộ nhớ máy
+                        getSharedPreferences("ChuotConPref", MODE_PRIVATE)
+                                .edit()
+                                .putString("TOKEN", data.token)
+                                .putString("HO_TEN", data.nguoiDung.hoTen)
+                                .apply();
+
+                        // Chuyển sang Bàn điều phối
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        intent.putExtra("TOKEN", data.token);
                         startActivity(intent);
                         finish();
                     } else {

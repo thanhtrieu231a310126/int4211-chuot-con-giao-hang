@@ -7,31 +7,49 @@
     android:orientation="vertical"
     android:background="#FAF7F2">
 
-    <!-- Header tiêu đề tối giản -->
+    <!-- Header tiêu đề có nút Đăng xuất -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:paddingHorizontal="20dp"
         android:paddingTop="24dp"
         android:paddingBottom="12dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Bàn Điều Phối"
-            android:textColor="#18181B"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvSoLuongDon"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bàn Điều Phối"
+                android:textColor="#18181B"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSoLuongDon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Đơn chưa gán: 0"
+                android:textColor="#71717A"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Nút Đăng xuất màu đỏ -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDangXuat"
+            style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Đơn chưa gán: 0"
-            android:textColor="#71717A"
-            android:textSize="14sp" />
+            android:text="Đăng xuất"
+            android:textColor="#EF4444"
+            android:textSize="13sp" />
     </LinearLayout>
 
     <!-- Hộp tìm kiếm lọc theo Phường/Xã bo tròn -->
