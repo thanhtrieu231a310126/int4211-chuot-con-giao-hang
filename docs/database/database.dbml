@@ -1,0 +1,85 @@
+Table nguoi_dung {
+  id int [pk, increment]
+  email varchar(255) [unique, not null]
+  mat_khau_hash varchar(255) [not null]
+  ho_ten varchar(100) [not null]
+  sdt varchar(20) [not null]
+  vai_tro varchar(20) [not null, note: 'DIEU_PHOI / SHIPPER']
+}
+
+
+Table khu_vuc {
+  id int [pk, increment]
+  ten varchar(100) [not null]
+  phuong_xa varchar(100) [not null]
+}
+
+
+Table shipper {
+  id int [pk, increment]
+  nguoi_dung_id int [unique, not null, ref: - nguoi_dung.id]
+  bien_so varchar(20) [not null]
+  khu_vuc_phu_trach int [not null, ref: > khu_vuc.id]
+  trang_thai varchar(30) [not null, note: 'SAN_SANG / DANG_GIAO / NGHI']
+  so_don_toi_da int [not null, default: 5, note: 'Máy chủ chặn gán đơn nếu số đơn đang giao vượt mức này']
+}
+
+
+Table giay_to_shipper {
+  id int [pk, increment]
+  shipper_id int [not null, ref: > shipper.id]
+  loai varchar(50) [not null, note: 'CCCD / GPLX / DANG_KY_XE']
+  so_giay_to varchar(50) [not null]
+  anh_url varchar(500)
+  ngay_het_han date
+}
+
+
+Table don_giao {
+  id int [pk, increment]
+  ma_van_don varchar(50) [unique, not null]
+  nguoi_gui varchar(100) [note: 'Cột mở rộng']
+  dia_chi_lay text [note: 'Cột mở rộng']
+  nguoi_nhan varchar(100) [not null]
+  sdt_nhan varchar(20) [not null]
+  dia_chi text [not null]
+  phuong_xa int [not null, ref: > khu_vuc.id]
+  trong_luong decimal(10,2)
+  tien_cod decimal(15,2) [default: 0]
+  shipper_id int [ref: > shipper.id, note: 'Nullable khi đơn mới tạo chưa gán shipper']
+  trang_thai varchar(30) [not null]
+  han_giao datetime [not null]
+  ghi_chu text [note: 'Cột mở rộng']
+}
+
+
+Table ly_do_that_bai {
+  id int [pk, increment]
+  ma varchar(50) [unique, not null]
+  mo_ta varchar(255) [not null, note: 'Danh mục chuẩn: không liên lạc được, khách từ chối, sai địa chỉ...']
+}
+
+
+Table lich_su_trang_thai {
+  id int [pk, increment]
+  don_id int [not null, ref: > don_giao.id]
+  trang_thai varchar(30) [not null]
+  thoi_diem datetime [not null, default: `now()`]
+  nguoi_cap_nhat int [not null, ref: > nguoi_dung.id]
+  ly_do_id int [ref: > ly_do_that_bai.id, note: 'Cột mở rộng - chỉ điền khi trạng thái là giao thất bại']
+  ghi_chu text
+  anh_url varchar(500)
+  
+}
+
+
+Table doi_soat_cod {
+  id int [pk, increment]
+  shipper_id int [not null, ref: > shipper.id]
+  ngay date [not null]
+  tong_cod decimal(15,2) [not null]
+  da_nop decimal(15,2) [not null]
+  chenh_lech decimal(15,2) [not null]
+  trang_thai varchar(30) [not null]
+} 
+
