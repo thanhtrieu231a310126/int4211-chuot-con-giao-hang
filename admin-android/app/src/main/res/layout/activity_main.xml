@@ -59,6 +59,16 @@
             android:inputType="text" />
     </com.google.android.material.card.MaterialCardView>
 
+    <!-- Vòng xoay tiến trình khi đang kết nối API Render -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginVertical="24dp"
+        android:indeterminateTint="#F97316"
+        android:visibility="gone" />
+
     <!-- Danh sách đơn hàng bằng RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvDonHang"

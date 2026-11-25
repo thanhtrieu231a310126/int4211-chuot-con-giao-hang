@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp" />
 
-        <!-- Icon xe máy giao hàng màu cam (thương hiệu Chuột Con) -->
+        <!-- Icon xe máy giao hàng màu cam -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,32 +49,36 @@
             android:layout_width="match_parent"
             android:layout_height="32dp" />
 
-        <!-- Ô nhập Email (có icon phong bì thư) -->
+        <!-- Ô nhập Email-->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilUsername"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
+            android:textColorHint="#71717A"
+            app:hintTextColor="#F97316"
             app:boxCornerRadiusBottomEnd="12dp"
             app:boxCornerRadiusBottomStart="12dp"
             app:boxCornerRadiusTopEnd="12dp"
             app:boxCornerRadiusTopStart="12dp"
-            app:boxStrokeColor="#E4E4E7"
+            app:boxStrokeColor="#F97316"
             app:boxBackgroundColor="#FFFFFF"
             app:startIconDrawable="@android:drawable/ic_dialog_email"
+            app:startIconTint="#71717A"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:imeOptions="actionNext"
                 android:id="@+id/etUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
+                android:textColor="#18181B"
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Ô nhập Mật khẩu (có icon ổ khóa & con mắt ẩn/hiện) -->
+        <!-- Ô nhập Mật khẩu -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilPassword"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -82,22 +86,27 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:hint="Mật khẩu"
+            android:textColorHint="#71717A"
+            app:hintTextColor="#F97316"
             app:boxCornerRadiusBottomEnd="12dp"
             app:boxCornerRadiusBottomStart="12dp"
             app:boxCornerRadiusTopEnd="12dp"
             app:boxCornerRadiusTopStart="12dp"
-            app:boxStrokeColor="#E4E4E7"
+            app:boxStrokeColor="#F97316"
             app:boxBackgroundColor="#FFFFFF"
             app:startIconDrawable="@android:drawable/ic_lock_idle_lock"
+            app:startIconTint="#71717A"
             app:passwordToggleEnabled="true"
+            app:passwordToggleTint="#71717A"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:imeOptions="actionDone"
                 android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
                 android:inputType="textPassword"
+                android:textColor="#18181B"
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 

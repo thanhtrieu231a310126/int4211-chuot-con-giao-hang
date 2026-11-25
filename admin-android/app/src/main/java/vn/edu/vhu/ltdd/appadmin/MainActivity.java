@@ -3,8 +3,10 @@ package vn.edu.vhu.ltdd.appadmin;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,8 +21,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "ChuotCon_Admin";
 
     private final List<DonHang> danhSachGoc = new ArrayList<>();
     private final List<DonHang> danhSachHienThi = new ArrayList<>();
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rvDonHang;
     private TextView tvSoLuongDon, tvDanhSachRong;
     private EditText edtLocPhuong;
+    private ProgressBar progressBar;
     private String token;
 
     @Override
@@ -40,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         tvSoLuongDon = findViewById(R.id.tvSoLuongDon);
         tvDanhSachRong = findViewById(R.id.tvDanhSachRong);
         edtLocPhuong = findViewById(R.id.edtLocPhuong);
+        progressBar = findViewById(R.id.progressBar);
 
         // Lấy token thật truyền từ màn hình Đăng nhập sang
         token = getIntent().getStringExtra("TOKEN");
@@ -75,16 +80,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void goiApiLayDanhSachDonThat() {
+        // Trạng thái 1: ĐANG TẢI
+        progressBar.setVisibility(View.VISIBLE);
+        rvDonHang.setVisibility(View.GONE);
+        tvDanhSachRong.setVisibility(View.GONE);
         tvSoLuongDon.setText("Đang tải dữ liệu từ máy chủ Render...");
+        Log.d(TAG, "Bắt đầu gọi API lấy danh sách đơn chưa gán");
 
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
         apiService.layDanhSachDon("Bearer " + token, "CHUA_GAN").enqueue(new Callback<List<ApiService.DonHangApi>>() {
             @Override
             public void onResponse(Call<List<ApiService.DonHangApi>> call, Response<List<ApiService.DonHangApi>> response) {
+                // Trạng thái 2: THÀNH CÔNG
+                progressBar.setVisibility(View.GONE);
+                rvDonHang.setVisibility(View.VISIBLE);
+
                 if (response.isSuccessful() && response.body() != null) {
                     danhSachGoc.clear();
-
-                    // Đọc từng đơn hàng từ database Supabase trên Render gửi về
                     for (ApiService.DonHangApi apiItem : response.body()) {
                         double kg = 0.0;
                         int cod = 0;
@@ -108,16 +120,19 @@ public class MainActivity extends AppCompatActivity {
                     danhSachHienThi.addAll(danhSachGoc);
                     adapter.notifyDataSetChanged();
                     capNhatSoLuong();
-
-                    Toast.makeText(MainActivity.this, "Đã tải thành công " + danhSachGoc.size() + " đơn từ server!", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "Tải thành công " + danhSachGoc.size() + " đơn từ Render");
                 } else {
+                    Log.e(TAG, "Lỗi từ máy chủ, mã: " + response.code());
                     Toast.makeText(MainActivity.this, "Lỗi lấy dữ liệu (Mã: " + response.code() + ")", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<ApiService.DonHangApi>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Lỗi kết nối máy chủ: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                // Trạng thái 3: LỖI MẠNG
+                progressBar.setVisibility(View.GONE);
+                Log.e(TAG, "Lỗi kết nối mạng: " + t.getMessage(), t);
+                Toast.makeText(MainActivity.this, "Không thể kết nối máy chủ Render!", Toast.LENGTH_SHORT).show();
             }
         });
     }

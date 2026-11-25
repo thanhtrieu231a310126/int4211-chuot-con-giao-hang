@@ -18,7 +18,7 @@ import retrofit2.Response;
  * LoginActivity: Màn hình Đăng nhập gọi API thật lên máy chủ Render.
  */
 public class LoginActivity extends AppCompatActivity {
-
+    private static final String TAG = "ChuotCon_Admin";
     private TextInputLayout tilUsername, tilPassword;
     private TextInputEditText etUsername, etPassword;
     private MaterialButton btnLogin;
