@@ -6,8 +6,16 @@ import 'package:http/http.dart' as http;
 import '../config/api_config.dart';
 import '../models/don_hang.dart';
 
+class PhienDangNhapHetHan implements Exception {
+  @override
+  String toString() =>
+      'Phiên đăng nhập đã hết hạn. Bạn vui lòng đăng nhập lại.';
+}
+
 class ApiService {
   static String? token;
+
+  static void dangXuat() => token = null;
 
   // render free khoi dong lai cham nen de timeout 60s
   static const _thoiGianCho = Duration(seconds: 60);
@@ -19,20 +27,31 @@ class ApiService {
 
   // POST /auth/dang-nhap
   static Future<void> dangNhap(String email, String matKhau) async {
+    dangXuat();
     final res = await _goi(
       () => http.post(
         Uri.parse(ApiConfig.baseUrl + ApiConfig.dangNhap),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email, 'matKhau': matKhau}),
       ),
+      canDangNhap: false,
     );
     final data = _docJson(res);
-    token = data['token'];
-    if (token == null) throw Exception('Backend không trả về token');
+    final tokenMoi = data['token'];
+    if (tokenMoi is! String || tokenMoi.trim().isEmpty) {
+      throw Exception('Máy chủ chưa xác nhận đăng nhập. Bạn vui lòng thử lại.');
+    }
+    if (data['nguoiDung'] is! Map || data['nguoiDung']['vaiTro'] != 'SHIPPER') {
+      throw Exception(
+        'Ứng dụng này dành cho tài khoản Shipper. Bạn vui lòng dùng đúng tài khoản.',
+      );
+    }
+    token = tokenMoi;
   }
 
   // GET /shipper/toi/don
   static Future<List<DonHang>> layDonCuaToi() async {
+    if (token == null) throw PhienDangNhapHetHan();
     final res = await _goi(
       () => http.get(
         Uri.parse(ApiConfig.baseUrl + ApiConfig.donCuaToi),
@@ -51,8 +70,9 @@ class ApiService {
   }
 
   static Future<http.Response> _goi(
-    Future<http.Response> Function() yeuCau,
-  ) async {
+    Future<http.Response> Function() yeuCau, {
+    bool canDangNhap = true,
+  }) async {
     final http.Response res;
     try {
       res = await yeuCau().timeout(_thoiGianCho);
@@ -63,9 +83,9 @@ class ApiService {
     } catch (_) {
       throw Exception('Không kết nối được máy chủ, kiểm tra mạng');
     }
-    if (res.statusCode == 401) {
-      token = null;
-      throw Exception(_docLoi(res));
+    if (res.statusCode == 401 && canDangNhap) {
+      dangXuat();
+      throw PhienDangNhapHetHan();
     }
     if (res.statusCode < 200 || res.statusCode >= 300) {
       throw Exception(_docLoi(res));

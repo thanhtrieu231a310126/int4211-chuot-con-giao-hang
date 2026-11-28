@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'screens/dang_nhap_screen.dart';
 
 void main() {
@@ -15,6 +16,7 @@ class AppClient extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(colorSchemeSeed: Colors.orange, useMaterial3: true),
       home: const DangNhapScreen(),
+      routes: {'/dang-nhap': (_) => const DangNhapScreen()},
     );
   }
 }
