@@ -45,15 +45,3 @@ class DonHang {
     }
   }
 }
-
-// du lieu test khi chua co backend
-const List<DonHang> danhSachDonGia = [
-  DonHang(maDon: 'DH001', tenNguoiNhan: 'Nguyễn Văn An',
-      diaChi: '12 Lê Lợi, P. Bến Thành', trangThai: 'DA_GAN', tienCod: 150000, trongLuong: 1.2),
-  DonHang(maDon: 'DH002', tenNguoiNhan: 'Trần Thị Bình',
-      diaChi: '45 Nguyễn Trãi, P. Chợ Quán', trangThai: 'DANG_GIAO', tienCod: 320000, trongLuong: 3.5),
-  DonHang(maDon: 'DH003', tenNguoiNhan: 'Lê Minh Cường',
-      diaChi: '8 Võ Văn Tần, P. Xuân Hòa', trangThai: 'THANH_CONG', tienCod: 0, trongLuong: 0.5),
-  DonHang(maDon: 'DH004', tenNguoiNhan: 'Phạm Thu Dung',
-      diaChi: '99 Cách Mạng Tháng 8, P. Bàn Cờ', trangThai: 'THAT_BAI', tienCod: 210000, trongLuong: 2),
-];
