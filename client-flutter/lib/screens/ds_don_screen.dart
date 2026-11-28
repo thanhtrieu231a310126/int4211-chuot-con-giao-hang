@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/don_hang.dart';
 import '../services/api_service.dart';
+import 'chi_tiet_don_screen.dart';
 
 class DsDonScreen extends StatefulWidget {
   const DsDonScreen({super.key});
@@ -154,6 +155,12 @@ class _DsDonScreenState extends State<DsDonScreen> {
                           vertical: 6,
                         ),
                         child: ListTile(
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  ChiTietDonScreen(don: don, tenTrangThai: chu),
+                            ),
+                          ),
                           title: Text(
                             '${don.maDon} - ${don.tenNguoiNhan}',
                             style: const TextStyle(fontWeight: FontWeight.bold),

@@ -7,6 +7,7 @@ class DonHang {
   final String trangThai;
   final int tienCod;
   final double trongLuong;
+  final DateTime? hanGiao;
 
   const DonHang({
     this.id = 0,
@@ -17,6 +18,7 @@ class DonHang {
     required this.trangThai,
     required this.tienCod,
     this.trongLuong = 0,
+    this.hanGiao,
   });
 
   factory DonHang.fromJson(Map<String, dynamic> j) {
@@ -31,6 +33,7 @@ class DonHang {
       trangThai: (j['trang_thai'] ?? '').toString(),
       tienCod: docSo(j['tien_cod']).round(),
       trongLuong: docSo(j['trong_luong']),
+      hanGiao: DateTime.tryParse((j['han_giao'] ?? '').toString()),
     );
   }
 
