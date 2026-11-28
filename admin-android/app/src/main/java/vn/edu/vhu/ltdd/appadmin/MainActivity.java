@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText edtLocPhuong;
     private ProgressBar progressBar;
     private String token;
+    private com.google.android.material.chip.ChipGroup chipGroupTrongLuong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,14 +75,20 @@ public class MainActivity extends AppCompatActivity {
             capNhatSoLuong();
         }
 
-        // 2. Chức năng lọc đơn theo Phường/Xã
+        // Ánh xạ nhóm nút lọc trọng lượng
+        chipGroupTrongLuong = findViewById(R.id.chipGroupTrongLuong);
+        chipGroupTrongLuong.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            locDonHang();
+        });
+
+        // Bắt sự kiện gõ tìm kiếm Phường/Xã
         edtLocPhuong.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                locDonTheoPhuong(s.toString().trim());
+                locDonHang();
             }
 
             @Override
@@ -160,22 +167,41 @@ public class MainActivity extends AppCompatActivity {
         danhSachHienThi.addAll(danhSachGoc);
     }
 
-    private void locDonTheoPhuong(String tuKhoa) {
+    // [Lab A6 & Lab A10]: Hàm lọc kết hợp cả Phường/Xã và Trọng lượng (chuẩn logic sinh viên dễ hiểu)
+    private void locDonHang() {
+        String tuKhoa = edtLocPhuong.getText().toString().trim().toLowerCase();
+        int idNutChon = chipGroupTrongLuong.getCheckedChipId();
+
         danhSachHienThi.clear();
 
-        if (tuKhoa.isEmpty()) {
-            danhSachHienThi.addAll(danhSachGoc);
-        } else {
-            for (DonHang don : danhSachGoc) {
-                if (don.getPhuongXa().toLowerCase().contains(tuKhoa.toLowerCase())) {
-                    danhSachHienThi.add(don);
-                }
+        for (DonHang don : danhSachGoc) {
+            // Điều kiện 1: Khớp Phường/Xã
+            boolean hopLePhuong = tuKhoa.isEmpty() || don.getPhuongXa().toLowerCase().contains(tuKhoa);
+
+            // Điều kiện 2: Khớp Khoảng trọng lượng
+            boolean hopLeTrongLuong = false;
+            double kg = don.getTrongLuong();
+
+            if (idNutChon == R.id.chipNhe) {
+                hopLeTrongLuong = (kg < 2.0); // Dưới 2kg
+            } else if (idNutChon == R.id.chipVua) {
+                hopLeTrongLuong = (kg >= 2.0 && kg <= 5.0); // Từ 2kg đến 5kg
+            } else if (idNutChon == R.id.chipNang) {
+                hopLeTrongLuong = (kg > 5.0); // Trên 5kg
+            } else {
+                hopLeTrongLuong = true; // Nút "Tất cả"
+            }
+
+            // Nếu thỏa mãn CẢ HAI điều kiện thì nhận vào danh sách hiển thị
+            if (hopLePhuong && hopLeTrongLuong) {
+                danhSachHienThi.add(don);
             }
         }
 
         adapter.notifyDataSetChanged();
         capNhatSoLuong();
 
+        // Ẩn hiện danh sách hoặc thông báo rỗng
         if (danhSachHienThi.isEmpty()) {
             tvDanhSachRong.setVisibility(View.VISIBLE);
             rvDonHang.setVisibility(View.GONE);

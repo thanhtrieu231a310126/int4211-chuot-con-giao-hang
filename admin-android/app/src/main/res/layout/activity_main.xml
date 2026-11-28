@@ -67,7 +67,7 @@
         <EditText
             android:id="@+id/edtLocPhuong"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="48dp"
             android:background="@null"
             android:paddingHorizontal="16dp"
             android:hint="🔍 Lọc theo Phường/Xã..."
@@ -75,8 +75,53 @@
             android:textColorHint="#A1A1AA"
             android:textSize="14sp"
             android:inputType="text" />
-    </com.google.android.material.card.MaterialCardView>
 
+    </com.google.android.material.card.MaterialCardView>
+    <!-- Hàng nút lọc theo Trọng lượng -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:paddingHorizontal="16dp"
+        android:layout_marginBottom="8dp">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupTrongLuong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleSelection="true"
+            app:selectionRequired="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipTatCa"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Tất cả" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipNhe"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dưới 2kg" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipVua"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2 - 5kg" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipNang"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trên 5kg" />
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
     <!-- Vòng xoay tiến trình khi đang kết nối API Render -->
     <ProgressBar
         android:id="@+id/progressBar"
