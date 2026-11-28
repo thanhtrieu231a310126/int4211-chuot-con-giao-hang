@@ -32,6 +32,12 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
+        <!-- Màn hình 3: Giám sát & Theo dõi toàn bộ đơn hàng (RecyclerView thứ 2) -->
+        <activity
+            android:name=".TheoDoiDonActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
     </application>
 
 </manifest>

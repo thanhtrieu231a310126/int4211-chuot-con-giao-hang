@@ -60,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
         // Bắt sự kiện bấm nút Đăng xuất -> Mở hộp thoại xác nhận
         findViewById(R.id.btnDangXuat).setOnClickListener(v -> hienThiHopThoaiDangXuat());
 
+        // Bắt sự kiện bấm nút Giám sát -> Mở màn hình Theo dõi đơn hàng
+        findViewById(R.id.btnTheoDoiDon).setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, TheoDoiDonActivity.class));
+        });
+
         rvDonHang.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new DonHangAdapter(danhSachHienThi, donHang -> {
@@ -77,6 +82,28 @@ public class MainActivity extends AppCompatActivity {
 
         // Ánh xạ nhóm nút lọc trọng lượng
         chipGroupTrongLuong = findViewById(R.id.chipGroupTrongLuong);
+
+        // Ép màu dịu mắt cho các Chip lọc
+        android.content.res.ColorStateList bgList = new android.content.res.ColorStateList(
+                new int[][]{ new int[]{android.R.attr.state_checked}, new int[]{} },
+                new int[]{ android.graphics.Color.parseColor("#F97316"), android.graphics.Color.parseColor("#FFFDF9") }
+        );
+        android.content.res.ColorStateList textList = new android.content.res.ColorStateList(
+                new int[][]{ new int[]{android.R.attr.state_checked}, new int[]{} },
+                new int[]{ android.graphics.Color.parseColor("#FFFFFF"), android.graphics.Color.parseColor("#18181B") }
+        );
+        android.content.res.ColorStateList strokeList = new android.content.res.ColorStateList(
+                new int[][]{ new int[]{android.R.attr.state_checked}, new int[]{} },
+                new int[]{ android.graphics.Color.parseColor("#F97316"), android.graphics.Color.parseColor("#E4DFD7") }
+        );
+
+        for (int i = 0; i < chipGroupTrongLuong.getChildCount(); i++) {
+            com.google.android.material.chip.Chip chip = (com.google.android.material.chip.Chip) chipGroupTrongLuong.getChildAt(i);
+            chip.setChipBackgroundColor(bgList);
+            chip.setTextColor(textList);
+            chip.setChipStrokeColor(strokeList);
+            chip.setChipStrokeWidth(2f);
+        }
         chipGroupTrongLuong.setOnCheckedStateChangeListener((group, checkedIds) -> {
             locDonHang();
         });

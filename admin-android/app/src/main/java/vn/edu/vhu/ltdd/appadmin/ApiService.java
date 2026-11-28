@@ -69,6 +69,7 @@ public interface ApiService {
         public String trong_luong;
         public String tien_cod;
         public String trang_thai;
+        public String ten_shipper;
     }
 
     // Khuôn dữ liệu Shipper do máy chủ Render trả về

@@ -56,7 +56,7 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
         holder.tvMaDon.setText(don.getMaDon());
         holder.tvNguoiNhan.setText(don.getNguoiNhan());
         holder.tvDiaChi.setText(don.getDiaChi() + ", " + don.getPhuongXa());
-        holder.tvTienCod.setText("COD: " + DonHang.dinhDangTien(don.getTienCod()) + " đ");
+        holder.tvTienCod.setText("COD: " + DonHang.dinhDangTien(don.getTienCod()));
         holder.tvTrongLuong.setText(don.getTrongLuong() + " kg");
 
         // Dùng getBindingAdapterPosition() để bắt đúng vị trí khi bấm

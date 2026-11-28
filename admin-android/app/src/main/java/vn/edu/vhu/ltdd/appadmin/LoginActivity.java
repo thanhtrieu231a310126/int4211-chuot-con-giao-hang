@@ -72,10 +72,9 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // 2. Khóa nút và thông báo đang kết nối máy chủ
+        // Khóa nút và đổi chữ sang trạng thái Loading chống bấm liên tục
         btnLogin.setEnabled(false);
-        btnLogin.setText("Đang kết nối máy chủ...");
-        Toast.makeText(this, "Đang gửi yêu cầu lên Render...", Toast.LENGTH_SHORT).show();
+        btnLogin.setText("Đang đăng nhập...");
 
         // 3. GỌI API THẬT LÊN RENDER
         ApiService apiService = ApiClient.getClient().create(ApiService.class);

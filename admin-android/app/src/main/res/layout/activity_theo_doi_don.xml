@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Màn hình Giám sát theo dõi toàn bộ đơn hàng trong ngày -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FAF7F2">
+
+    <!-- Header tiêu đề và nút Quay lại -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="14dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btnQuayLai"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            app:cardBackgroundColor="#FFFDF9"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:strokeColor="#E4DFD7"
+            app:strokeWidth="1dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="←"
+                android:textColor="#18181B"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="14dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Giám Sát Đơn Hàng"
+                android:textColor="#18181B"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvTongSoDon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Đang tải dữ liệu..."
+                android:textColor="#71717A"
+                android:textSize="13sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Hàng nút lọc theo Trạng thái -->
+    <HorizontalScrollView
+        android:id="@+id/hsvTrangThai"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:clipToPadding="false"
+        android:paddingStart="16dp"
+        android:paddingEnd="32dp"
+        android:layout_marginBottom="8dp">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupTrangThai"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleSelection="true"
+            app:selectionRequired="true"
+            app:chipSpacingHorizontal="6dp">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipTatCa"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipMinTouchTargetSize="0dp"
+                android:paddingHorizontal="4dp"
+                android:checked="true"
+                android:text="Tất cả" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipChuaGan"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipMinTouchTargetSize="0dp"
+                android:paddingHorizontal="4dp"
+                android:text="Chưa gán" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipDaGan"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipMinTouchTargetSize="0dp"
+                android:paddingHorizontal="4dp"
+                android:text="Đã gán" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipDangGiao"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipMinTouchTargetSize="0dp"
+                android:paddingHorizontal="4dp"
+                android:text="Đang giao" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipThanhCong"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipMinTouchTargetSize="0dp"
+                android:paddingHorizontal="4dp"
+                android:text="Thành công" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipThatBai"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipMinTouchTargetSize="0dp"
+                android:paddingHorizontal="4dp"
+                android:text="Thất bại" />
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+
+    <!-- Vòng xoay ProgressBar đang kết nối API Render -->
+    <ProgressBar
+        android:id="@+id/progressBarTheoDoi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginVertical="24dp"
+        android:indeterminateTint="#F97316"
+        android:visibility="gone" />
+
+    <!-- Danh sách đơn hàng bằng RecyclerView thứ 2 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTheoDoiDon"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp" />
+
+    <!-- Dòng thông báo khi không có đơn nào phù hợp -->
+    <TextView
+        android:id="@+id/tvDanhSachRong"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Không có đơn hàng nào ở trạng thái này"
+        android:textColor="#A1A1AA"
+        android:textSize="15sp"
+        android:visibility="gone" />
+
+</LinearLayout>
