@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         rvDonHang.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new DonHangAdapter(danhSachHienThi, donHang -> {
-            Toast.makeText(this, "Đã chọn đơn: #" + donHang.getMaDon() + " (" + donHang.getPhuongXa() + ")", Toast.LENGTH_SHORT).show();
+            hienThiDialogChonShipper(donHang);
         });
         rvDonHang.setAdapter(adapter);
 
@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                         } catch (Exception ignored) {}
 
                         danhSachGoc.add(new DonHang(
+                                apiItem.id,
                                 apiItem.ma_van_don,
                                 apiItem.nguoi_nhan,
                                 apiItem.sdt_nhan,
@@ -162,12 +163,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void taoDuLieuMau() {
-        danhSachGoc.add(new DonHang("DH001", "Nguyễn Văn An", "0901112233", "123 Lê Lợi", "Phường Bến Nghé", 1.2, 85000));
-        danhSachGoc.add(new DonHang("DH002", "Trần Thị Bình", "0912223344", "45 Hai Bà Trưng", "Phường Đa Kao", 0.5, 0));
+        danhSachGoc.add(new DonHang(1, "DH001", "Nguyễn Văn An", "0901112233", "123 Lê Lợi", "Phường Bến Nghé", 1.2, 85000));
+        danhSachGoc.add(new DonHang(2, "DH002", "Trần Thị Bình", "0912223344", "45 Hai Bà Trưng", "Phường Đa Kao", 0.5, 0));
         danhSachHienThi.addAll(danhSachGoc);
     }
 
-    // [Lab A6 & Lab A10]: Hàm lọc kết hợp cả Phường/Xã và Trọng lượng (chuẩn logic sinh viên dễ hiểu)
+    //Hàm lọc kết hợp cả Phường/Xã và Trọng lượng
     private void locDonHang() {
         String tuKhoa = edtLocPhuong.getText().toString().trim().toLowerCase();
         int idNutChon = chipGroupTrongLuong.getCheckedChipId();
@@ -231,5 +232,92 @@ public class MainActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
+    }
+    // Hiển thị Dialog danh sách Shipper lấy từ API Render
+    private void hienThiDialogChonShipper(DonHang donHang) {
+        Toast.makeText(this, "Đang tải danh sách Shipper...", Toast.LENGTH_SHORT).show();
+
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        apiService.layDanhSachShipper("Bearer " + token).enqueue(new Callback<List<ApiService.ShipperApi>>() {
+            @Override
+            public void onResponse(Call<List<ApiService.ShipperApi>> call, Response<List<ApiService.ShipperApi>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    List<ApiService.ShipperApi> danhSachShipper = response.body();
+
+                    // Chuẩn bị danh sách tên Shipper để hiển thị
+                    String[] tenShippers = new String[danhSachShipper.size()];
+                    for (int i = 0; i < danhSachShipper.size(); i++) {
+                        ApiService.ShipperApi s = danhSachShipper.get(i);
+                        String trangThai = s.so_don_dang_cam >= s.so_don_toi_da ? "ĐẦY ĐƠN" : "Rảnh";
+                        tenShippers[i] = s.ho_ten + " (" + s.so_don_dang_cam + "/" + s.so_don_toi_da + " đơn - " + trangThai + ")";
+                    }
+
+                    // Hiện AlertDialog danh sách chọn Shipper
+                    new androidx.appcompat.app.AlertDialog.Builder(MainActivity.this)
+                            .setTitle("Chọn Shipper cho đơn #" + donHang.getMaDon())
+                            .setItems(tenShippers, (dialog, which) -> {
+                                ApiService.ShipperApi shipperDuocChon = danhSachShipper.get(which);
+                                xacNhanVaGanDon(donHang, shipperDuocChon);
+                            })
+                            .setNegativeButton("Đóng", null)
+                            .show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Không thể lấy danh sách Shipper!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ApiService.ShipperApi>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Lỗi mạng khi tải Shipper: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // Hộp thoại xác nhận trước khi gán đơn
+    private void xacNhanVaGanDon(DonHang donHang, ApiService.ShipperApi shipper) {
+        // Kiểm tra nếu Shipper đã đầy đơn (Kiểm soát tải trọng theo Đề tài 6)
+        if (shipper.so_don_dang_cam >= shipper.so_don_toi_da) {
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Cảnh báo quá tải!")
+                    .setMessage(shipper.ho_ten + " đã nhận đủ " + shipper.so_don_toi_da + "/" + shipper.so_don_toi_da + " đơn tối đa. Vui lòng chọn Shipper khác!")
+                    .setPositiveButton("Đã hiểu", null)
+                    .show();
+            return;
+        }
+
+        // Hộp thoại xác nhận trước khi phân công
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Xác nhận gán đơn")
+                .setMessage("Bạn có chắc chắn muốn gán đơn #" + donHang.getMaDon() + " cho " + shipper.ho_ten + "?")
+                .setPositiveButton("Gán đơn", (dialog, which) -> {
+                    thucHienGoiApiGanDon(donHang.getId(), shipper.id, shipper.ho_ten);
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
+    }
+
+    // Gọi API PATCH lên máy chủ Render để gán đơn thật
+    private void thucHienGoiApiGanDon(int donHangId, int shipperId, String tenShipper) {
+        Toast.makeText(this, "Đang gửi lệnh gán đơn...", Toast.LENGTH_SHORT).show();
+
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        apiService.ganShipperChoDon("Bearer " + token, donHangId, new ApiService.GanShipperRequest(shipperId))
+                .enqueue(new Callback<Object>() {
+                    @Override
+                    public void onResponse(Call<Object> call, Response<Object> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(MainActivity.this, "Gán đơn thành công cho " + tenShipper + "!", Toast.LENGTH_LONG).show();
+                            // Tải lại danh sách đơn để đơn vừa gán biến mất khỏi Bàn điều phối
+                            goiApiLayDanhSachDonThat();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Gán thất bại (Mã lỗi: " + response.code() + ")", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Object> call, Throwable t) {
+                        Toast.makeText(MainActivity.this, "Lỗi kết nối khi gán đơn: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
